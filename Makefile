@@ -1,6 +1,7 @@
 VERSION := 0.5.3
 
 vpath test
+vpath %.tex context
 
 # Basename of thesis
 THESIS = thesis
@@ -10,20 +11,28 @@ TESTFILE = temptest
 TEX_DIR = tex
 BIB_DIR = bib
 TEST_DIR = test
+CONTEXT_TEX = $(shell cd context && ls *.tex)
+CONTEXT_PDF = $(CONTEXT_TEX:%.tex=%.pdf)
 
 # Option for latexmk
 LATEXMK_OPT = -xelatex -gg -silent -f
 
 all: $(THESIS).pdf
 
-.PHONY : all clean version cleantest release cleanall
+.PHONY : all clean version cleantest release cleanall context update
 
 $(THESIS).pdf : $(THESIS).tex $(TEX_DIR)/*.tex $(BIB_DIR)/*.bib *.cls *.cfg Makefile
 	-latexmk $(LATEXMK_OPT) $~
 
+context : $(CONTEXT_PDF)
+
+$(CONTEXT_PDF) : %.pdf : %.tex Makefile
+	cd context/ && context $*
+
 clean :
 	latexmk -C
 	-rm *.xdv *.bbl $(TEX_DIR)/*.xdv $(TEX_DIR)/*.aux $(TEX_DIR)/*.log $(TEX_DIR)/*.fls
+	-cd context && context --purge
 
 cleanall : clean
 	-rm -f $(THESIS).pdf
@@ -48,3 +57,5 @@ git :
 	git push gitlab
 	git push github
 
+update :
+	wget https://ctex-doc.googlecode.com/svn-history/r20/trunk/context-notes-zh-cn/src/zhfonts.tex -O context/zhfonts.tex
