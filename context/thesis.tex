@@ -1,0 +1,34 @@
+\usemodule[zhfonts]
+\zhfonts[rm, 11pt]
+
+\setuphead[title][style=\bfc]
+\setuphead[section, subject][style=\bfa]
+
+\setupcombinedlist[content][alternative=c]
+
+\starttext
+
+\startfrontmatter
+\chapter{摘要}
+\chapter{Abstract}
+\completecontent
+\stopfrontmatter
+
+\startbodymatter
+\chapter{这是什么？}
+\chapter{一些排版例子}
+\stopbodymatter
+
+\startappendices
+\chapter{斯托克斯旋度}
+\chapter{散度}
+\stopappendices
+
+\startbackmatter
+\chapter{更新记录}
+\chapter{后记}
+\chapter{致谢}
+\stopbackmatter
+
+\stoptext
+
